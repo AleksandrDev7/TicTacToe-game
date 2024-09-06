@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import GameField from "../gameField";
 
-export default function Username({ onChange }) {
+export default function Username({  }) {
 
     const [one, setPlayerOne] = useState('1');
     const [two, setPlayerTwo] = useState('2');
@@ -14,30 +15,36 @@ export default function Username({ onChange }) {
     }
 
 
-
     return (
-        <div className="popupName">
-            <form onSubmit={(e) => {
-                e.preventDefault();
-            }}
-            >
-                <input
-                    type="text"
-                    className="player_input"
-                    value={one}
-                    onChange={handleChangeOne}
-                />
-                <input
-                    type="text"
-                    className="player_input"
-                    value={two}
-                    onChange={handleChangeTwo}
-                />
-                <p>
-                    Добро пожаловать в игру, <i> {one} </i> и <i> {two} </i>!
-                </p>
-            </form>
+        <div>
+            <div className="popupName">
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                }}
+                >
+                    <input
+                        type="text"
+                        className="player_input"
+                        value={one}
+                        onChange={handleChangeOne}
+                    />
+                    <input
+                        type="text"
+                        className="player_input"
+                        value={two}
+                        onChange={handleChangeTwo}
+                    />
+                    <p>
+                        Добро пожаловать в игру, <i> {one} </i> и <i> {two} </i>!
+                    </p>
+                </form>
 
+            </div>
+            <GameField
+                playerOne={handleChangeOne}
+                playerTwo={handleChangeTwo}
+            />
         </div>
+
     );
 }
