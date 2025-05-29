@@ -3,7 +3,7 @@ import './style.scss';
 import {useState} from "react";
 
 
-function GameField({playerOne, playerTwo}) {
+function GameField({savedNameOne, savedNameTwo}) {
     const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(
         Array(9).fill(null)
@@ -50,11 +50,11 @@ function GameField({playerOne, playerTwo}) {
     let winnerName;
     if (winner) {
         if(winner === 'X') {
-            winnerName = playerOne;
+            winnerName = savedNameOne;
             status = "Winner: " + winnerName;
         }
     } else {
-        status = "Next player: " + (xIsNext ? "X" : "0");
+        status = "Next player: " + (xIsNext ? {savedNameOne} : {savedNameTwo});
     }
 
     return (
