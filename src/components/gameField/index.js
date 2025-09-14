@@ -1,16 +1,33 @@
 import FieldButton from "../FieldButton";
 import './style.scss';
 import {useState} from "react";
+const axios = require('axios');
 
-
-function GameField({savedNameOne, savedNameTwo}) {
+function GameField({savedNameOne, savedNameTwo, ShowData}) {
     const [xIsNext, setXIsNext] = useState(true);
     const [squares, setSquares] = useState(
         Array(9).fill(null)
     );
 
+    const [winnerResult, setWinnerResult] = useState(null);
+
+    const handleSaveResult = async () => {
+        try {
+            const response = await axios.post('http://localhost:3001/api/save-result', {
+                savedNameOne,
+                savedNameTwo,
+                winnerResult: winnerResult || 'Ничья',
+                date: new Date().toISOString(),
+            });
+            console.log('Результат сохранён!', response.data);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    };
+
+
     function handleClick(i) {
-        if (squares[i] || calculate(squares)) {
+        if (squares[i] || calculateWinner(squares)) {
             return;
         }
 
@@ -24,7 +41,7 @@ function GameField({savedNameOne, savedNameTwo}) {
         setXIsNext(!xIsNext);
     }
 
-    function calculate(squares) {
+    function calculateWinner(squares) {
         const combinationWinner = [
             [0,1,2],
             [0,3,6],
@@ -42,20 +59,36 @@ function GameField({savedNameOne, savedNameTwo}) {
                 return squares[a];
             }
         }
+
         return null;
     }
 
-    const winner = calculate(squares);
+    const winner = calculateWinner(squares);
     let status;
     let winnerName;
+    let saveResults;
     if (winner) {
-        if(winner === 'X') {
-            winnerName = savedNameOne;
-            status = "Winner: " + winnerName;
+        if (winner === 'X') {
+            winnerName = savedNameOne || 'X';
+            status = `Победитель - ${winnerName}`;
+        } else if (winner === 'O') {  // Заменил '0' на 'O'
+            winnerName = savedNameTwo || 'O';
+            status = `Победитель - ${winnerName}`;
+        } else {
+            status = 'Ничья!';
         }
-    } else {
-        status = "Next player: " + (xIsNext ? {savedNameOne} : {savedNameTwo});
+    } else if (savedNameOne && savedNameTwo) {
+        status = ShowData &&`Следующий ход: ${xIsNext ? savedNameOne : savedNameTwo}`;
+    } else if (winner === ( 'X' || 'O')) {
+        saveResults =`<button onClick={handleSaveResult}>
+            Сохранить результат
+        </button>`
     }
+
+    const resetGame = () => {
+        setSquares(Array(9).fill(null));
+        setXIsNext(true);
+    };
 
     return (
         <section>
@@ -107,7 +140,15 @@ function GameField({savedNameOne, savedNameTwo}) {
             <div>
                 <div className="status">
                     <p>{status}</p>
+
                 </div>
+                {ShowData &&
+                    <div className="reset-game">
+                        <button className="reset-btn" onClick={resetGame}>
+                            Сбросить игру
+                        </button>
+                        {saveResults}
+                    </div>}
             </div>
         </section>
     );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GameField from "../gameField";
 import {useLocalStorage} from 'react-use'
+import {Breadcrumb} from "semantic-ui-react";
 
 export default function Username() {
 
@@ -19,11 +20,12 @@ export default function Username() {
     }
 */
 
-    const [inputValuePlayerOne, setInputValuePlayerOne] = useState('')
-    const [inputValuePlayerTwo, setInputValuePlayerTwo] = useState('')
-    const [savedNameOne, setSavedNameOne] = useLocalStorage('savedText', '')
-    const [savedNameTwo, setSavedNameTwo] = useLocalStorage('savedText', '')
-    const [ShowData, setShowData] = useState(false)
+    const [inputValuePlayerOne, setInputValuePlayerOne] = useState('');
+    const [inputValuePlayerTwo, setInputValuePlayerTwo] = useState('');
+    const [savedNameOne, setSavedNameOne] = useLocalStorage('savedText', '');
+    const [savedNameTwo, setSavedNameTwo] = useLocalStorage('savedText', '');
+    const [ShowData, setShowData] = useState(false);
+    const [isStringVisible, setIsStringVisible] = useState(false);
 
     const submitPlayersName = () => {
         setSavedNameOne(inputValuePlayerOne)
@@ -80,33 +82,34 @@ export default function Username() {
             */
         <div>
             <div>
-                <input
+                <p>Игрок 1 -</p> <input
                     value={inputValuePlayerOne}
                     onChange={(e) => setInputValuePlayerOne(e.target.value)}
-
                 />
-                <input
+            </div>
+            <div>
+                <p>Игрок 2 -</p> <input
                     value={inputValuePlayerTwo}
                     onChange={(e) => setInputValuePlayerTwo(e.target.value)}
 
                 />
-                <button type="button"
+            </div>
+            <button type="button"
                         onClick={submitPlayersName}
                         onKeyDown={handleKeyPress}
-                >
+            >
                     Сохранить
-                </button>
-            </div>
+            </button>
             {ShowData &&
-                <p>Игрок 1 - {savedNameOne},
-                Игрок 2 - {savedNameTwo} </p>}
+                <p>{savedNameOne} - ходит Х, <br/>
+                {savedNameTwo} - ходит О </p>}
             {
                 (<GameField
                     savedNameOne={savedNameOne}
-                    savedNameTwo={savedNameTwo}/>)
+                    savedNameTwo={savedNameTwo}
+                    ShowData={ShowData}
+                />)
             }
         </div>
-
-
     );
 }

@@ -4,7 +4,6 @@ import './index.scss';
 import Username from "./components/UserName";
 import Header from "./components/Header";
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
