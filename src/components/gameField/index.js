@@ -55,18 +55,21 @@ function GameField({savedNameOne, savedNameTwo, ShowData}) {
 
         for (let i = 0; i < combinationWinner.length; i++) {
             const [a, b, c] = combinationWinner[i];
+            const winnerName = combinationWinner[i] === 'X' ? savedNameOne : savedNameTwo;
             if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return squares[a];
+                return  {
+                    winner: squares[a],
+                    winnerName: winnerName
+                };
             }
         }
 
         return null;
     }
 
-    const winner = calculateWinner(squares);
+    const { winner, winnerName } = calculateWinner(squares);
     let status;
-    let winnerName;
-    let saveResults;
+    const {saveResults, setSaveResults} = useState(null);
     if (winner) {
         if (winner === 'X') {
             winnerName = savedNameOne || 'X';
@@ -79,10 +82,8 @@ function GameField({savedNameOne, savedNameTwo, ShowData}) {
         }
     } else if (savedNameOne && savedNameTwo) {
         status = ShowData &&`Следующий ход: ${xIsNext ? savedNameOne : savedNameTwo}`;
-    } else if (winner === ( 'X' || 'O')) {
-        saveResults =`<button onClick={handleSaveResult}>
-            Сохранить результат
-        </button>`
+    } else if (winnerName || 'Ничья') {
+        setSaveResults(Array(9).fill(null));
     }
 
     const resetGame = () => {
@@ -147,7 +148,9 @@ function GameField({savedNameOne, savedNameTwo, ShowData}) {
                         <button className="reset-btn" onClick={resetGame}>
                             Сбросить игру
                         </button>
-                        {saveResults}
+                        <button onClick={handleSaveResult}>
+                            Сохранить результат
+                        </button>
                     </div>}
             </div>
         </section>

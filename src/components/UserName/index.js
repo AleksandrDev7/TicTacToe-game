@@ -25,7 +25,6 @@ export default function Username() {
     const [savedNameOne, setSavedNameOne] = useLocalStorage('savedText', '');
     const [savedNameTwo, setSavedNameTwo] = useLocalStorage('savedText', '');
     const [ShowData, setShowData] = useState(false);
-    const [isStringVisible, setIsStringVisible] = useState(false);
 
     const submitPlayersName = () => {
         setSavedNameOne(inputValuePlayerOne)
@@ -98,7 +97,7 @@ export default function Username() {
                         onClick={submitPlayersName}
                         onKeyDown={handleKeyPress}
             >
-                    Сохранить
+                    Сохранить имена
             </button>
             {ShowData &&
                 <p>{savedNameOne} - ходит Х, <br/>
